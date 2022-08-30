@@ -1,0 +1,17 @@
+{
+  "name": "@firebase-proxy/storage",
+  "version": "0.0.1",
+  "main": "src/index.mjs",
+  "author": "",
+	"files": ["dist"],
+  "scripts": {
+    "build": "npm install --save-dev && rollup -c",
+    "dev": "npm install --save-dev && rollup -c -w"
+  },
+  "dependencies": {
+    "@firebase-proxy/core": "file:../core"
+  },
+  "devDependencies": {
+    "rollup": "2.72.1"
+  }
+}
