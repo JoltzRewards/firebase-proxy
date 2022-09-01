@@ -1,15 +1,19 @@
 {
   "name": "@firebase-proxy/app",
   "version": "0.0.1",
-  "main": "src/index.mjs",
+  "main": "src/index.js",
   "author": "",
-	"files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "npm install --save-dev && rollup -c",
     "dev": "npm install --save-dev && rollup -c -w"
   },
   "dependencies": {
-    "@firebase-proxy/core": "file:../core"
+    "@apollo/client": "^3.6.9",
+    "@firebase-proxy/core": "file:../core",
+    "@nhost/nhost-js": "^1.4.10"
   },
   "devDependencies": {
     "rollup": "2.72.1"

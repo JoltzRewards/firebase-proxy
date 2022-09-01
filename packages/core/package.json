@@ -1,7 +1,7 @@
 {
   "name": "@firebase-proxy/core",
   "version": "0.0.1",
-  "main": "src/index.mjs",
+  "main": "src/index.js",
   "author": "",
 	"files": ["dist"],
   "scripts": {

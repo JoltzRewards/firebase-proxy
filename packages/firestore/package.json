@@ -1,7 +1,7 @@
 {
   "name": "@firebase-proxy/firestore",
   "version": "0.0.1",
-  "main": "src/index.mjs",
+  "main": "src/index.js",
   "author": "",
 	"files": ["dist"],
   "scripts": {
@@ -9,6 +9,7 @@
     "dev": "npm install --save-dev && rollup -c -w"
   },
   "dependencies": {
+    "@apollo/client": "^3.6.9",
     "@firebase-proxy/core": "file:../core"
   },
   "devDependencies": {

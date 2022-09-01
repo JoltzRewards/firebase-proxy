@@ -16,6 +16,7 @@ class Upload {
 	constructor(reference, content) {
 		this.reference = reference;
 		this.content = content;
+		this.snapshot = { ref: "" };
 	}
 
 	on(event, snapshot, error, done) {
