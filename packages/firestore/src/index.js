@@ -258,6 +258,8 @@ export async function getDocs(query) {
 
 		return [];
 	}
+
+	documents.__proto__.size = documents.length;
 	
 	return documents;
 }
