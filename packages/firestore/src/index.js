@@ -59,6 +59,10 @@ export async function setDoc(query, value) {
 
 	logger.log("found mapping", { mapping });
 
+	if (!value[mapping.key]) {
+		value[mapping.key] = query.content.key;
+	}
+
 	let mapped = {};
 
 	for (var key in value) {
