@@ -46,6 +46,12 @@ export function query() {
 	return statments;
 }
 
+export function increment() {
+	logger.log("got increment", { arguments: [...arguments] });
+
+	return {};
+}
+
 export async function setDoc(query, value) {
 	logger.log("setting document", { query, value });
 
@@ -317,6 +323,15 @@ const schema = {
 				"storageId": "storageID",
 				"color": "color",
 				"brand": "brandID"
+			}
+		},
+		"transactions": {
+			"name": "pilot_transactions",
+			"key": "ID",
+			"fields": {
+				"ID": "ID",
+				"user": "user",
+				"campaign": "campaign"
 			}
 		}
 	}
