@@ -15,7 +15,17 @@ export function initializeApp(configuration) {
 
 		window.apollo = new ApolloClient({
 			uri: window.nhost.graphql.getUrl(),
-			cache: new InMemoryCache()
+			cache: new InMemoryCache(),
+			defaultOptions: {
+      			watchQuery: {
+       				fetchPolicy: "no-cache",
+					errorPolicy: "ignore"
+				},
+				query: {
+					fetchPolicy: "no-cache",
+					errorPolicy: "all"
+      			}
+    		}
 		});
 	}
 
