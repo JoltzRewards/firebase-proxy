@@ -6,6 +6,20 @@ export const logger = new Logger("auth");
 export function getAuth(app) {
 	logger.log("creating auth adapter");
 
+	if (window.nhost) {
+		window.nhost.auth.onAuthStateChanged((event, session) => {
+			logger.log("auth state change", { event, session });
+
+			if (session) {
+				if (event === "SIGNED_IN" && localStorage.getItem("authentication_state") === "pending") {
+					localStorage.setItem("authentication_state", "active");
+				}
+			} else {
+				localStorage.setItem("authentication_state", "empty");
+			}
+		});
+	}
+
 	return {};
 }
 
@@ -27,16 +41,12 @@ export function signOut(auth) {
 export function onAuthStateChanged(auth, callback) {
 	if (window.nhost) {
 		window.nhost.auth.onAuthStateChanged((event, session) => {
-			logger.log("auth state change", { event, session });
-
 			if (session != null) {
 				callback({
 					user: {
 						uid: session.user.id
 					}
-				})
-			} else {
-				localStorage.setItem("authentication_state", "empty");
+				});
 			}
 		});
 	}
@@ -87,10 +97,12 @@ export function isSignInWithEmailLink(auth, location) {
 
 	logger.log("checking link", { auth, state, location });
 
-	if (state === "pending") {
+	if (state === "active") {
+		localStorage.setItem("authentication_state", "done");
+
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -110,7 +122,8 @@ export async function signInWithEmailLink(auth, email, location) {
 
 	return {
 		user: {
-			uid: user.id
+			uid: user.id,
+			email: email
 		}
 	}
 }
