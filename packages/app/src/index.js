@@ -10,7 +10,8 @@ export function initializeApp(configuration) {
 		logger.log("creating new app adapter");
 
 		window.nhost = new NhostClient({
-  			subdomain: 'localhost'
+  			subdomain: process.env.REACT_APP_NHOST_SUBDOMAIN || "localhost",
+  			region: process.env.REACT_APP_NHOST_REGION || null
 		});
 
 		window.apollo = new ApolloClient({
