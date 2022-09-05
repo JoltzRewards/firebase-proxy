@@ -26,7 +26,12 @@ export function getAuth(app) {
 export function sendSignInLinkToEmail(auth, email, settings) {
 	logger.log("sending sign in link", { auth, email, settings });
 
-	window.nhost.auth.signIn({ email });
+	window.nhost.auth.signIn({
+		email,
+		options: {
+			redirectTo: settings ? settings.url : window.location.href
+		}
+	});
 
 	// TRUBIT-specific
 	localStorage.setItem("emailForSignIn", email);
