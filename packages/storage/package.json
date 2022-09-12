@@ -1,17 +1,20 @@
 {
   "name": "@firebase-proxy/storage",
   "version": "0.0.1",
-  "main": "src/index.js",
+  "source": "src/index.js",
+  "main": "dist/index.js",
   "author": "",
-	"files": ["dist"],
+	"files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "npm install --save-dev && rollup -c",
-    "dev": "npm install --save-dev && rollup -c -w"
+    "build": "parcel build",
+    "dev": "parcel watch"
   },
   "dependencies": {
     "@firebase-proxy/core": "file:../core"
   },
   "devDependencies": {
-    "rollup": "2.72.1"
+    "parcel": "^2.7.0"
   }
 }
