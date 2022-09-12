@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from "graphql-tag";
 import { Logger } from "@firebase-proxy/core";
 
 export const logger = new Logger("firestore");
@@ -49,6 +49,12 @@ export function query() {
 export async function setDoc(query, value) {
 	logger.log("setting document", { query, value });
 
+	if (!window.nhost) {
+		logger.log("nhost has not started");
+
+		return null;
+	}
+
 	const mapping = schema.mapping[query.content.table];
 
 	if (!mapping) {
@@ -58,6 +64,10 @@ export async function setDoc(query, value) {
 	}
 
 	logger.log("found mapping", { mapping });
+
+	if (!value[mapping.key]) {
+		value[mapping.key] = query.content.key;
+	}
 
 	let mapped = {};
 
@@ -69,18 +79,13 @@ export async function setDoc(query, value) {
 
 	logger.log("mapped values", { mapped });
 
-	const result = await window.apollo.mutate({ 
-	 	mutation: gql`
-	 		mutation SetDoc($value: ${mapping.name}_insert_input!) {
-				insert_${mapping.name}_one(object: $value) {
- 					ID
-				}
- 			}
- 		`,
-		variables: {
-			value: mapped
-		}
-	});
+	const result = await window.nhost.graphql.request(gql`
+		mutation SetDoc($value: ${mapping.name}_insert_input!) {
+			insert_${mapping.name}_one(object: $value) {
+ 				ID
+			}
+ 		}
+ 	`, { value: mapped });
 
 	logger.log("result", { result });
 }
@@ -109,8 +114,8 @@ class Document {
 }
 
 async function getDocuments(query) {
-	if (!window.apollo) {
-		logger.log("apollo has not started");
+	if (!window.nhost) {
+		logger.log("nhost has not started");
 
 		return null;
 	}
@@ -198,18 +203,13 @@ async function getDocuments(query) {
 
 	logger.log("got where statement", { where, query });
 
-	const result = await window.apollo.query({ 
-		query: gql`
-			query GetDoc($where: ${mapping.name}_bool_exp) {
-				${mapping.name}(where: $where) {
-					${Object.values(mapping.fields).join("\n")}
-				}
+	const result = await window.nhost.graphql.request(gql`
+		query GetDoc($where: ${mapping.name}_bool_exp) {
+			${mapping.name}(where: $where) {
+				${Object.values(mapping.fields).join("\n")}
 			}
-		`,
-		variables: { 
-			where: where
 		}
-	});
+	`, { where });
 
 	logger.log("got result", { result, query });
 
@@ -258,6 +258,8 @@ export async function getDocs(query) {
 
 		return [];
 	}
+
+	documents.__proto__.size = documents.length;
 	
 	return documents;
 }
@@ -311,6 +313,15 @@ const schema = {
 				"storageId": "storageID",
 				"color": "color",
 				"brand": "brandID"
+			}
+		},
+		"transactions": {
+			"name": "pilot_transactions",
+			"key": "ID",
+			"fields": {
+				"ID": "ID",
+				"user": "user",
+				"campaign": "campaign"
 			}
 		}
 	}

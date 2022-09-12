@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from "graphql-tag";
 import { Logger } from "@firebase-proxy/core";
 
 export const logger = new Logger("auth");
@@ -6,13 +6,32 @@ export const logger = new Logger("auth");
 export function getAuth(app) {
 	logger.log("creating auth adapter");
 
+	if (window.nhost) {
+		window.nhost.auth.onAuthStateChanged((event, session) => {
+			logger.log("auth state change", { event, session });
+
+			if (session) {
+				if (event === "SIGNED_IN" && localStorage.getItem("authentication_state") === "pending") {
+					localStorage.setItem("authentication_state", "active");
+				}
+			} else {
+				localStorage.setItem("authentication_state", "empty");
+			}
+		});
+	}
+
 	return {};
 }
 
 export function sendSignInLinkToEmail(auth, email, settings) {
 	logger.log("sending sign in link", { auth, email, settings });
 
-	window.nhost.auth.signIn({ email });
+	window.nhost.auth.signIn({
+		email,
+		options: {
+			redirectTo: settings ? settings.url : window.location.href
+		}
+	});
 
 	// TRUBIT-specific
 	localStorage.setItem("emailForSignIn", email);
@@ -27,16 +46,12 @@ export function signOut(auth) {
 export function onAuthStateChanged(auth, callback) {
 	if (window.nhost) {
 		window.nhost.auth.onAuthStateChanged((event, session) => {
-			logger.log("auth state change", { event, session });
-
 			if (session != null) {
 				callback({
 					user: {
 						uid: session.user.id
 					}
-				})
-			} else {
-				localStorage.setItem("authentication_state", "empty");
+				});
 			}
 		});
 	}
@@ -47,25 +62,21 @@ export function onAuthStateChanged(auth, callback) {
 export async function fetchSignInMethodsForEmail(auth, email) {
 	logger.log("fetchSignInMethodsForEmail", { auth, email });
 
-	if (!window.apollo) {
-		logger.log("apollo has not started");
+	if (!window.nhost) {
+		logger.log("nhost has not started");
 
 		return [];
 	}
 
-	const result = await window.apollo.query({ 
-		query: gql`
+	const result = await window.graphql.request.query(gql`
 		query CheckEmail($email: citext) {
 			users(where: {email: {_eq: $email}}) {
 				emailVerified
 			}
-		}`,
-		variables: {
-			email
 		}
-	});
+	`, { email });
 
-	if (!result || !result.data || !result.data.users[0] ) {
+	if (result.error || !result.data || !result.data.users[0]) {
 		logger.log("user does not exist", { email });
 
 		return [];
@@ -87,10 +98,12 @@ export function isSignInWithEmailLink(auth, location) {
 
 	logger.log("checking link", { auth, state, location });
 
-	if (state === "pending") {
+	if (state === "active") {
+		localStorage.setItem("authentication_state", "done");
+
 		return true;
 	}
-	
+
 	return false;
 }
 
@@ -110,7 +123,8 @@ export async function signInWithEmailLink(auth, email, location) {
 
 	return {
 		user: {
-			uid: user.id
+			uid: user.id,
+			email: email
 		}
 	}
 }

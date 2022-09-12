@@ -1,0 +1,21 @@
+diff --git a/node_modules/axios/lib/defaults/index.js b/node_modules/axios/lib/defaults/index.js
+index 9199818..d954f5a 100644
+--- a/node_modules/axios/lib/defaults/index.js
++++ b/node_modules/axios/lib/defaults/index.js
+@@ -17,15 +17,7 @@ function setContentTypeIfUnset(headers, value) {
+ }
+ 
+ function getDefaultAdapter() {
+-  var adapter;
+-  if (typeof XMLHttpRequest !== 'undefined') {
+-    // For browsers use XHR adapter
+-    adapter = require('../adapters/xhr');
+-  } else if (typeof process !== 'undefined' && Object.prototype.toString.call(process) === '[object process]') {
+-    // For node use HTTP adapter
+-    adapter = require('../adapters/http');
+-  }
+-  return adapter;
++  return require('../adapters/xhr');
+ }
+ 
+ function stringifySafely(rawValue, parser, encoder) {
