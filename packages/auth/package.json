@@ -12,9 +12,9 @@
     "dev": "parcel watch"
   },
   "dependencies": {
-    "@apollo/client": "^3.6.9",
     "@firebase-proxy/core": "file:../core",
-    "@nhost/nhost-js": "^1.4.11"
+    "@nhost/nhost-js": "^1.4.11",
+    "graphql-tag": "^2.12.6"
   },
   "devDependencies": {
     "parcel": "^2.7.0"

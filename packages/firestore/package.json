@@ -1,18 +1,21 @@
 {
   "name": "@firebase-proxy/firestore",
   "version": "0.0.1",
-  "main": "src/index.js",
+  "source": "src/index.js",
+  "main": "dist/index.js",
   "author": "",
-	"files": ["dist"],
+	"files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "npm install --save-dev && rollup -c",
-    "dev": "npm install --save-dev && rollup -c -w"
+    "build": "parcel build",
+    "dev": "parcel watch"
   },
   "dependencies": {
-    "@apollo/client": "^3.6.9",
-    "@firebase-proxy/core": "file:../core"
+    "@firebase-proxy/core": "file:../core",
+    "graphql-tag": "^2.12.6"
   },
   "devDependencies": {
-    "rollup": "2.72.1"
+    "parcel": "^2.7.0"
   }
 }
