@@ -117,7 +117,7 @@ async function getDocuments(query) {
 	if (!window.nhost) {
 		logger.log("nhost has not started");
 
-		return null;
+		return [];
 	}
 
 	let table;
@@ -135,7 +135,7 @@ async function getDocuments(query) {
 	if (!table) {
 		logger.log("bad query", { query });
 
-		return null;
+		return [];
 	}
 
 	const mapping = schema.mapping[table];
@@ -143,7 +143,7 @@ async function getDocuments(query) {
 	if (!mapping) {
 		logger.log("mapping not found", { table });
 
-		return null;
+		return [];
 	}
 
 	logger.log("found mapping", { table, mapping });
@@ -185,7 +185,7 @@ async function getDocuments(query) {
 					default:
 						logger.log("can't find comparison conversion", { statement });
 
-						return null;
+						return [];
 				}
 
 				where._and.push({
@@ -231,7 +231,7 @@ async function getDocuments(query) {
 		return all;
 	}
 
-	return null;
+	return [];
 }
 
 export async function getDoc(query) {
@@ -256,10 +256,12 @@ export async function getDocs(query) {
 	if (!documents || documents.length == 0) {
 		logger.log("failed to find documents", { query });
 
-		return [];
+		documents.__proto__.empty = true;
+	} else {
+		documents.__proto__.size = documents.length;
+		documents.__proto__.docs = documents;
+		documents.__proto__.empty = false;
 	}
-
-	documents.__proto__.size = documents.length;
 	
 	return documents;
 }
