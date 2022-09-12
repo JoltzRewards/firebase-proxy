@@ -26,10 +26,17 @@ export function getAuth(app) {
 export function sendSignInLinkToEmail(auth, email, settings) {
 	logger.log("sending sign in link", { auth, email, settings });
 
+	let redirectTo = settings ? settings.url : window.location.href;
+
+	// TODO(Linden): remove once nhost/hasura-auth#233 is fixed
+	if (redirectTo.includes("?") && !redirectTo.includes("&")) {
+		redirectTo += "&1=1";
+	}
+
 	window.nhost.auth.signIn({
 		email,
 		options: {
-			redirectTo: settings ? settings.url : window.location.href
+			redirectTo
 		}
 	});
 
