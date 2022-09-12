@@ -68,7 +68,7 @@ export async function fetchSignInMethodsForEmail(auth, email) {
 		return [];
 	}
 
-	const result = await window.graphql.request.query(gql`
+	const result = await window.nhost.graphql.request(gql`
 		query CheckEmail($email: citext) {
 			users(where: {email: {_eq: $email}}) {
 				emailVerified
