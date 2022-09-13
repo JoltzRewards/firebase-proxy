@@ -322,7 +322,9 @@ const schema = {
 			"key": "ID",
 			"fields": {
 				"ID": "ID",
+				"userID": "userID",
 				"user": "user",
+				"campaignID": "campaignID",
 				"campaign": "campaign"
 			}
 		}
