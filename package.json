@@ -13,7 +13,7 @@
     "postinstall": "patch-package",
     "build": "lerna run --scope @trubittech/* --scope trubittech build",
     "dev": "lerna run --parallel --scope @trubittech/* --scope trubittech dev",
-    "publish": "lerna publish"
+    "publish": "lerna publish --no-git-reset"
   },
   "private": false,
   "publishConfig": {

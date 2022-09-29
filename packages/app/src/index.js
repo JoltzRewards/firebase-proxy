@@ -8,8 +8,8 @@ export function initializeApp(configuration) {
 		logger.log("creating new app adapter");
 
 		window.nhost = new NhostClient({
-			subdomain: localStorage.getItem("nhost-domain") || process.env.REACT_APP_NHOST_SUBDOMAIN || "localhost",
-			region: localStorage.getItem("nhost-region") || process.env.REACT_APP_NHOST_REGION || null
+			subdomain: localStorage.getItem("nhost-domain") || "sspblsjcforgiuatmnbp",
+			region: localStorage.getItem("nhost-region") || "us-east-1"
 		});
 	}
 
