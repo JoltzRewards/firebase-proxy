@@ -1,5 +1,5 @@
 import { NhostClient } from "@nhost/nhost-js";
-import { Logger } from "@firebase-proxy/core";
+import { Logger } from "@trubittech/firebase-proxy-core";
 
 export const logger = new Logger("firestore");
 
@@ -14,17 +14,4 @@ export function initializeApp(configuration) {
 	}
 
 	return window.nhost;
-}
-
-window.debug = {
-	...{
-		restart: initializeApp,
-		setHost: function(domain, region) {
-			localStorage.setItem("nhost-domain", domain);
-			localStorage.setItem("nhost-region", region);
-
-			initializeApp();
-		}
-	},
-	...window.debug
 }

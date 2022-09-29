@@ -1,5 +1,5 @@
 import { gql } from "graphql-tag";
-import { Logger } from "@firebase-proxy/core";
+import { Logger } from "@trubittech/firebase-proxy-core";
 
 export const logger = new Logger("auth");
 

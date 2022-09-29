@@ -1,5 +1,5 @@
 {
-  "name": "@firebase-proxy/auth",
+  "name": "@trubittech/firebase-proxy-auth",
   "version": "0.0.1",
   "source": "src/index.js",
   "main": "dist/index.js",
@@ -12,11 +12,16 @@
     "dev": "parcel watch"
   },
   "dependencies": {
-    "@firebase-proxy/core": "file:../core",
     "@nhost/nhost-js": "^1.4.11",
+    "@trubittech/firebase-proxy-core": "file:../core",
     "graphql-tag": "^2.12.6"
   },
   "devDependencies": {
     "parcel": "^2.7.0"
+  },
+  "private": false,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }
