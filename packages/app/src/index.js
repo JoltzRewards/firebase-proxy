@@ -5,12 +5,14 @@ export const logger = new Logger("firestore");
 
 export function initializeApp(configuration) {
 	if (!window.nhost) {
-		logger.log("creating new app adapter");
+		const state = {
+			subdomain: configuration.domain || import.meta.env.VITE_NHOST_SUBDOMAIN || "localhost",
+			region: configuration.region  || import.meta.env.VITE_NHOST_REGION || null
+		}
 
-		window.nhost = new NhostClient({
-			subdomain: localStorage.getItem("nhost-domain") || "sspblsjcforgiuatmnbp",
-			region: localStorage.getItem("nhost-region") || "us-east-1"
-		});
+		logger.log("creating new app adapter", state);
+
+		window.nhost = new NhostClient(state);
 	}
 
 	return window.nhost;
