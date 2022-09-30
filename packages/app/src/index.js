@@ -1,16 +1,18 @@
 import { NhostClient } from "@nhost/nhost-js";
 import { Logger } from "@trubittech/firebase-proxy-core";
 
-export const logger = new Logger("firestore");
+export const logger = new Logger("app");
 
 export function initializeApp(configuration) {
 	if (!window.nhost) {
-		logger.log("creating new app adapter");
+		const state = {
+			subdomain: configuration?.domain || process.env.VITE_NHOST_SUBDOMAIN || "localhost",
+			region: configuration?.region || process.env.VITE_NHOST_REGION || null
+		}
 
-		window.nhost = new NhostClient({
-			subdomain: localStorage.getItem("nhost-domain") || "sspblsjcforgiuatmnbp",
-			region: localStorage.getItem("nhost-region") || "us-east-1"
-		});
+		logger.log("creating new app adapter", state);
+
+		window.nhost = new NhostClient(state);
 	}
 
 	return window.nhost;
