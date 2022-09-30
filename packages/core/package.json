@@ -1,6 +1,6 @@
 {
   "name": "@trubittech/firebase-proxy-core",
-  "version": "0.0.1",
+  "version": "0.0.2-vite.0",
   "source": "src/index.js",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
